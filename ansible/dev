@@ -1,0 +1,2 @@
+[tomcat]
+pet-clinic@vbox ansible_connection=local

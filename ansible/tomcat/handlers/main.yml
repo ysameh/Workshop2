@@ -1,0 +1,14 @@
+---
+- name: stop tomcat
+  listen:
+    - restart tomcat
+    - stop tomcat
+  shell: "{{ ansible_env.CATALINA_HOME }}/bin/shutdown.sh"
+    
+
+- name: start tomcat
+  listen: 
+    - restart tomcat
+    - start tomcat
+  shell: "nohup {{ ansible_env.CATALINA_HOME }}/bin/startup.sh &"
+

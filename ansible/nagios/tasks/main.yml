@@ -1,0 +1,69 @@
+---
+- name: Install Nagios with shell script
+  shell: "{{ ansible_env.HOME }}/Workshop2/scripts/install_nagios.sh"
+  changed_when: false
+
+  
+- name: Define Nagios command to check Tomcat process
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/nagios/etc/objects/commands.cfg"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - Tomcat Commands"
+    block: |
+      define command {
+        command_name check_tomcat_process
+        command_line {{ ansible_env.HOME }}/nagios/libexec/check_procs -c 1: -C java
+      }
+
+      define command {
+        command_name check_tomcat_port
+        command_line {{ ansible_env.HOME }}/nagios/libexec/check_tcp -H {{ ansible_default_ipv4.address }} -p 9090
+      }  
+  notify: restart nagios
+
+- name: Check if tomcat.cfg exists
+  stat:
+    path: "{{ ansible_env.HOME }}/nagios/etc/objects/tomcat.cfg"
+  register: tomcat_cfg
+
+- name: Define Nagios services for Tomcat monitoring
+  copy:
+    dest: "{{ ansible_env.HOME }}/nagios/etc/objects/tomcat.cfg"
+    content: |
+      define host {
+        use                     linux-server
+        host_name               tomcat-server
+        alias                   Tomcat Server
+        address                 {{ ansible_default_ipv4.address }}
+       
+      }
+    
+      define service {
+        use                 generic-service
+        host_name           tomcat-server
+        service_description Tomcat Process
+        check_command       check_tomcat_process
+        check_interval      1
+        retry_interval      1
+      }
+
+      define service {
+        use                 generic-service
+        host_name           tomcat-server
+        service_description Tomcat Port 9090
+        check_command       check_tomcat_port
+        check_interval      1
+        retry_interval      1
+      }
+  #when: not tomcat_cfg.stat.exists
+  notify: restart nagios
+
+- name: Ensure tomcat.cfg is included in Nagios configuration
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/nagios/etc/nagios.cfg"
+    line: "cfg_file={{ ansible_env.HOME }}/nagios/etc/objects/tomcat.cfg"
+    state: present
+  notify: restart nagios
+
+
+
+ 

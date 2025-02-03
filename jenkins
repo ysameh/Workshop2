@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Clone Repository') {
+            steps {
+                script {
+                    sh 'rm -rf $HOME/Workshop2/spring-petclinic' // Clean up before cloning
+                    sh 'git clone https://github.com/spring-projects/spring-petclinic $HOME/Workshop2/spring-petclinic'
+                }
+            }
+        }
+        
+        stage('Modify Application') {
+            steps {
+                script {
+                    sh '$HOME/Workshop2/scripts/modifyapp.sh'
+                }
+            }
+        }
+        
+        stage('Build Application') {
+            steps {
+                script {
+                    sh 'cd $HOME/Workshop2/spring-petclinic && ./mvnw spring-javaformat:apply'
+                    sh 'cd $HOME/Workshop2/spring-petclinic && ./mvnw clean package -DskipTests &>/dev/null'                   
+                }
+            }
+        }
+        
+        stage('Deploy with Ansible') {
+            steps {
+                script {
+                    sh 'cd $HOME/Workshop2/ansible && ansible-playbook petclinic.yml'
+                }
+            }
+        }
+
+        stage('Run Sanity Checks') {
+            steps {
+                script {
+                    sh 'cd $HOME/Workshop2/ansible && ansible-playbook sanity_checks.yml'
+                }
+            }
+        }
+    }
+}
+

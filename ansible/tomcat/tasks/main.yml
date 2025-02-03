@@ -1,0 +1,53 @@
+---
+- name: Install Tomcat with shell script
+  shell: "{{ ansible_env.HOME }}/Workshop2/scripts/install_tomcat.sh"
+  notify: start tomcat
+  
+  
+- name: Ensure the roles exists in tomcat-users.xml
+  xml:
+   path: "{{ ansible_env.CATALINA_HOME }}/conf/tomcat-users.xml"
+   namespaces:
+     tomcat: "http://tomcat.apache.org/xml"
+   xpath: "/tomcat:tomcat-users"
+   set_children:
+     - role:
+         rolename: manager-gui  
+  changed_when: false
+     
+- name: Ensure the admin user exists in tomcat-users.xml
+  xml:
+   path: "{{ ansible_env.CATALINA_HOME }}/conf/tomcat-users.xml"
+   namespaces:
+     tomcat: "http://tomcat.apache.org/xml"
+   xpath: "/tomcat:tomcat-users"
+   set_children:
+     - user:
+         username: tomcat
+         password: s3cret
+         roles: manager-gui
+  changed_when: false
+         
+- name: Check if app already deployed
+  stat:  
+    path: "{{ ansible_env.CATALINA_HOME }}/webapps/petclinic.war"
+  register: petclinic_file
+  notify: start tomcat
+  
+- name: Deploy petclinic  
+  copy: 
+    src: "{{ ansible_env.HOME }}/Workshop2/spring-petclinic/target/petclinic.war"
+    dest: "{{ ansible_env.CATALINA_HOME }}/webapps/petclinic.war"
+  when: not petclinic_file.stat.exists
+  notify: start tomcat
+
+- name: Change Tomcat Port to 9090
+  xml:
+    path: "{{ ansible_env.CATALINA_HOME }}/conf/server.xml"
+    xpath: "/Server/Service/Connector[@port='8080']"
+    attribute: port
+    value: "9090"
+  notify:
+   - restart tomcat
+      
+

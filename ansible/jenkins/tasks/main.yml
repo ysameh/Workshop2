@@ -1,0 +1,4 @@
+---
+- name: Install Jenkins with shell script
+  shell: "{{ ansible_env.HOME }}/Workshop2/scripts/install_jenkins.sh"
+  changed_when: false

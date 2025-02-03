@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Define the file path for the PetClinicApplication.java file
+file="src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java"
+
+# Check if the file exists
+if [[ -f "$file" ]]; then
+    # Backup the original file
+    cp "$file" "${file}.bak"
+
+    # Add the import for SpringBootServletInitializer
+    sed -i '/@SpringBootApplication/a import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;' "$file"
+
+    # Modify the class declaration to extend SpringBootServletInitializer
+    sed -i 's/public class PetClinicApplication {/public class PetClinicApplication extends SpringBootServletInitializer {/g' "$file"
+
+    # Modify the main method to use SpringBootServletInitializer's configure method
+    sed -i 's/public static void main(String[] args) {/public static void main(String[] args) { SpringApplication.run(PetClinicApplication.class, args); }/g' "$file"
+    
+    echo "PetClinicApplication.java has been modified successfully."
+else
+    echo "File not found: $file"
+fi
+
