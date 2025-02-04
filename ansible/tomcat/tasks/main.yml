@@ -1,28 +1,19 @@
 ---
   
-- name: Ensure the roles exists in tomcat-users.xml
+- name: Ensure the roles and users exist in tomcat-users.xml
   xml:
-   path: "{{ ansible_env.CATALINA_HOME }}/conf/tomcat-users.xml"
-   namespaces:
-     tomcat: "http://tomcat.apache.org/xml"
-   xpath: "/tomcat:tomcat-users"
-   set_children:
-     - role:
-         rolename: manager-gui  
-  #changed_when: false
-     
-- name: Ensure the admin user exists in tomcat-users.xml
-  xml:
-   path: "{{ ansible_env.CATALINA_HOME }}/conf/tomcat-users.xml"
-   namespaces:
-     tomcat: "http://tomcat.apache.org/xml"
-   xpath: "/tomcat:tomcat-users"
-   set_children:
-     - user:
-         username: tomcat
-         password: s3cret
-         roles: manager-gui
-  #changed_when: false
+    path: "{{ ansible_env.CATALINA_HOME }}/conf/tomcat-users.xml"
+    namespaces:
+      tomcat: "http://tomcat.apache.org/xml"
+    xpath: "/tomcat:tomcat-users"
+    set_children:
+      - role:
+          rolename: manager-gui
+      - user:
+          username: tomcat
+          password: s3cret  #add your password here
+          roles: manager-gui
+
          
 - name: Check if app already deployed
   stat:  

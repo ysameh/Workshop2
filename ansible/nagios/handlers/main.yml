@@ -1,12 +1,9 @@
 ---
 - name: stop nagios
   listen: restart nagios
-  shell: |
-    if pgrep "nagios" > /dev/null; then
-      killall nagios
-    fi 
+  shell: "pgrep -f '[n]agios' || killall nagios"
 
 - name: start nagios
   listen: restart nagios
-  shell: "nohup {{ ansible_env.HOME }}/nagios/bin/nagios {{ ansible_env.HOME }}/nagios/etc/nagios.cfg &"
+  shell: "! pgrep -f '[n]agios' || nohup {{ ansible_env.HOME }}/nagios/bin/nagios {{ ansible_env.HOME }}/nagios/etc/nagios.cfg &"
 

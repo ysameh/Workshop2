@@ -1,32 +1,46 @@
 ---
 - hosts: tomcat
   tasks:
-   - name: Start Tomcat
-     shell: "nohup {{ ansible_env.CATALINA_HOME }}/bin/startup.sh &"
-    
-   - name: Wait for Tomcat to fully start
-     wait_for:
-       path: "{{ ansible_env.CATALINA_HOME }}/logs/catalina.out"
-       search_regex: "Server startup in"
-       timeout: 60
+    - name: Check if Tomcat is already running
+      shell: "pgrep -f '[c]atalina' || echo 'not running'"
+      register: tomcat_process
+      changed_when: false
 
-   - name: Check if PetClinic WAR is deployed
-     stat:
-       path: "{{ ansible_env.CATALINA_HOME }}/webapps/petclinic.war"
-     register: petclinic_war
-     failed_when: not petclinic_war.stat.exists
-   
-   - name: Check if PetClinic application accessible
-     uri:
-       url: "http://localhost:9090/petclinic/"
-       method: GET
-       status_code: 200
-     register: petclinic_status
-     retries: 10
-     delay: 5
-     until: petclinic_status.status == 200
+    - name: Start Tomcat if not running
+      shell: "nohup {{ ansible_env.CATALINA_HOME }}/bin/startup.sh &"
+      when: "'not running' in tomcat_process.stdout"
 
-   - name: Confirm PetClinic is accessible
-     debug:
-       msg: "PetClinic is deployed successfully and accessible!"
+    - name: Wait for Tomcat to start listening on port 9090
+      wait_for:
+        port: 9090
+        state: started
+        timeout: 60
 
+    - name: Check if PetClinic WAR is deployed
+      stat:
+        path: "{{ ansible_env.CATALINA_HOME }}/webapps/petclinic.war"
+      register: petclinic_war
+      failed_when: not petclinic_war.stat.exists
+
+    - name: Check if PetClinic application is accessible
+      uri:
+        url: "http://localhost:9090/petclinic/"
+        method: GET
+        status_code: 200
+      register: petclinic_status
+      retries: 10
+      delay: 5
+      until: petclinic_status.status == 200
+
+    - name: Confirm PetClinic is accessible
+      debug:
+        msg: "PetClinic is deployed successfully and accessible!"
+
+    - name: Check if Nagios is already running
+      shell: "pgrep -f '[n]agios' || echo 'not running'"
+      register: nagios_process
+      changed_when: false
+
+    - name: Start Nagios if not running
+      shell: "nohup {{ ansible_env.HOME }}/nagios/bin/nagios {{ ansible_env.HOME }}/nagios/etc/nagios.cfg &"
+      when: "'not running' in nagios_process.stdout"

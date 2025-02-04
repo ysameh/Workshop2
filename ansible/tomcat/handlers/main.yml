@@ -3,12 +3,12 @@
   listen:
     - restart tomcat
     - stop tomcat
-  shell: "{{ ansible_env.CATALINA_HOME }}/bin/shutdown.sh"
+  shell: "! pgrep -f '[c]atalina' || {{ ansible_env.CATALINA_HOME }}/bin/shutdown.sh"
     
 
 - name: start tomcat
   listen: 
     - restart tomcat
     - start tomcat
-  shell: "nohup {{ ansible_env.CATALINA_HOME }}/bin/startup.sh &"
+  shell: "pgrep -f '[c]atalina' || nohup {{ ansible_env.CATALINA_HOME }}/bin/startup.sh &"
 

@@ -7,7 +7,7 @@
     block: |
       define command {
         command_name check_tomcat_process
-        command_line {{ ansible_env.HOME }}/nagios/libexec/check_procs -c 1: -C java
+        command_line {{ ansible_env.HOME }}/nagios/libexec/check_procs -c 1: -a catalina
       }
 
       define command {
@@ -50,7 +50,6 @@
         check_interval      1
         retry_interval      1
       }
-  #when: not tomcat_cfg.stat.exists
   notify: restart nagios
 
 - name: Ensure tomcat.cfg is included in Nagios configuration
