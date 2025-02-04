@@ -1,0 +1,22 @@
+---
+- hosts: tomcat
+  tasks:
+    
+    - name: Install JDK
+      shell: "{{ ansible_env.HOME }}/Workshop2/scripts/install_jdk.sh"
+      changed_when: false 
+  
+    - name: Install Tomcat
+      shell: "{{ ansible_env.HOME }}/Workshop2/scripts/install_tomcat.sh"
+      changed_when: false
+      
+    - name: Install Jenkins
+      shell: "{{ ansible_env.HOME }}/Workshop2/scripts/install_jenkins.sh"
+      changed_when: false  
+    
+    - name: Install Nagios
+      shell: "{{ ansible_env.HOME }}/Workshop2/scripts/install_nagios.sh"
+      changed_when: false
+      
+    
+

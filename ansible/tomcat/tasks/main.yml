@@ -1,8 +1,4 @@
 ---
-- name: Install Tomcat with shell script
-  shell: "{{ ansible_env.HOME }}/Workshop2/scripts/install_tomcat.sh"
-  notify: start tomcat
-  
   
 - name: Ensure the roles exists in tomcat-users.xml
   xml:
@@ -13,7 +9,7 @@
    set_children:
      - role:
          rolename: manager-gui  
-  changed_when: false
+  #changed_when: false
      
 - name: Ensure the admin user exists in tomcat-users.xml
   xml:
@@ -26,7 +22,7 @@
          username: tomcat
          password: s3cret
          roles: manager-gui
-  changed_when: false
+  #changed_when: false
          
 - name: Check if app already deployed
   stat:  

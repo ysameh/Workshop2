@@ -1,8 +1,4 @@
 ---
-- name: Install Nagios with shell script
-  shell: "{{ ansible_env.HOME }}/Workshop2/scripts/install_nagios.sh"
-  changed_when: false
-
   
 - name: Define Nagios command to check Tomcat process
   blockinfile:

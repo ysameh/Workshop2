@@ -28,7 +28,7 @@ echo "Compiling and installing Nagios..."
 cd "$SOURCE_DIR"
 ./configure --prefix="$INSTALL_PATH" --with-nagios-user="$USER" --with-nagios-group="$USER" --with-httpd-conf=/etc/httpd/conf.d  &>/dev/null
 
-make -j$(nproc) &>/dev/null  # Using parallel jobs
+#make -j$(nproc) &>/dev/null  # Using parallel jobs
 make all &>/dev/null
 make install &>/dev/null
 make install-commandmode &>/dev/null
@@ -50,7 +50,7 @@ cd nagios-plugins-2.3.3
 
 ./configure --prefix="$INSTALL_PATH" --with-nagios-user="$USER" --with-nagios-group="$USER" &>/dev/null
 
-make -j$(nproc) &>/dev/null  # Using parallel jobs 
+#make -j$(nproc) &>/dev/null  # Using parallel jobs 
 make install &>/dev/null
 
 #Setting Nagios home enviroment variable
