@@ -1,8 +1,8 @@
-# Workshop2
+# Workshop 2
 
 ## Overview
 
-*Workshop2* is a project designed to build and deploy an application called **Pet Clinic** to a Tomcat server and configure Nagios to monitor Tomcat. The entire process is automated using Ansible and Jenkins.
+*Workshop 2* is a project designed to build and deploy an application called **Pet Clinic** to a Tomcat server and configure Nagios to monitor Tomcat. The entire process is automated using Ansible and Jenkins.
 
 ## Project Structure
 
@@ -34,10 +34,6 @@ To get started with this project, follow these steps:
    - This installs JDK, Nagios, Tomcat, and Jenkins.
    
 4. **Jenkins pipeline**:
-   - Run the Ansible playbook to install the required tools:
-     ```bash
-     ansible-playbook ansible/install_tools.yml
-     ```
    - Run the Jenkins pipeline located in the `jenkinsfile` to automate the build and deployment process. 
      ```bash
      java -Dhudson.util.ProcessTree.disable=true -jar jenkins.war
