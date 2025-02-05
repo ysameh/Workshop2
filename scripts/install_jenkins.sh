@@ -20,8 +20,8 @@ install_jenkins(){
     # Check if Jenkins already installed
     if [ -f "${Install_Dir}/jenkins.war" ]; then
 	echo "Jenkins already installed"
-	echo 'Starting Jenkins...'
-	echo "java -Dhudson.util.ProcessTree.disable=true -jar ${INSTALL_DIR}/jenkins.war"
+#	echo 'Starting Jenkins...'
+#	echo "java -Dhudson.util.ProcessTree.disable=true -jar ${INSTALL_DIR}/jenkins.war"
 	exit 0
     fi
 
@@ -45,8 +45,8 @@ install_jenkins(){
     echo "Applying environment changes..."
     source "$HOME/.bashrc"
 
-   echo 'Jenkins installation complete. To start Jenkins, run:'
-   echo "java -Dhudson.util.ProcessTree.disable=true -jar ${INSTALL_DIR}/jenkins.war"
+ #  echo 'Jenkins installation complete. To start Jenkins, run:'
+ #  echo "java -Dhudson.util.ProcessTree.disable=true -jar ${INSTALL_DIR}/jenkins.war"
 }
 
 install_jenkins
