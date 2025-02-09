@@ -23,7 +23,7 @@ pipeline {
             steps {
                 script {
                     sh 'cd $HOME/Workshop2/spring-petclinic && ./mvnw spring-javaformat:apply &>/dev/null'
-                    sh 'cd $HOME/Workshop2/spring-petclinic && ./mvnw clean package -DskipTests &>/dev/null'                   
+                    sh 'cd $HOME/Workshop2/spring-petclinic && ./mvnw clean package -DskipTests &>/dev/null'         #Build the app using maven wrapper          
                 }
             }
         }
