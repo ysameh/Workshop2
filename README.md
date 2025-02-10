@@ -31,7 +31,7 @@ To get started with this project, follow these steps:
      ```bash
      ansible-playbook ansible/install_tools.yml
      ```
-   - This installs JDK, Nagios, Tomcat, and Jenkins.
+   - This installs JDK, Tomcat, Nagios, and Jenkins.
    
 4. **Jenkins pipeline**:
    - Run the Jenkins pipeline located in the `jenkinsfile` to automate the build and deployment process. 
