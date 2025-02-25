@@ -4,7 +4,7 @@ install_tomcat() {
     
     # Define Tomcat version
     TOMCAT_VERSION="10"  # Change to the latest version as needed
-    TOMCAT_BUILD="10.1.34"  # Change to the latest version as needed
+    TOMCAT_BUILD="10.1.36"  # Change to the latest version as needed
     INSTALL_DIR="${HOME}/tomcat_${TOMCAT_VERSION}"  # Directory to install Tomcat
     DOWNLOAD_URL="https://dlcdn.apache.org/tomcat/tomcat-${TOMCAT_VERSION}/v${TOMCAT_BUILD}/bin/apache-tomcat-${TOMCAT_BUILD}.tar.gz"
 

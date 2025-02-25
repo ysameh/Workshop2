@@ -39,7 +39,7 @@ install_jdk() {
     fi
     rm "$INSTALL_DIR/jdk.tar.gz"
     
-    if ! grep -q 'JAVA_HOME=$INSTALL_DIR' ~/.bashrc; then
+    if ! grep -q "JAVA_HOME=$INSTALL_DIR" ~/.bashrc; then
         echo 'Setting up environment variables...'
         echo "export JAVA_HOME=$INSTALL_DIR" >> ~/.bashrc
         echo "export PATH=$JAVA_HOME/bin:$PATH" >> ~/.bashrc
