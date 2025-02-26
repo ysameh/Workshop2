@@ -1,7 +1,7 @@
 ---
 - name: stop nagios
   listen: restart nagios
-  shell: "! pgrep -f '[n]agios' || killall nagios || true"
+  shell: "pgrep -f '[n]agios' && killall nagios || true"
 
 - name: start nagios
   listen: restart nagios

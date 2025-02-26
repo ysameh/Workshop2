@@ -19,14 +19,18 @@
   stat:  
     path: "{{ ansible_env.CATALINA_HOME }}/webapps/petclinic.war"
   register: petclinic_file
-  notify: start tomcat
+
+- name: Remove old WAR
+  file:
+    path: "{{ ansible_env.CATALINA_HOME }}/webapps/petclinic.war"
+    state: absent
+  when: petclinic_file.stat.exists
   
 - name: Deploy petclinic  
   copy: 
     src: "{{ ansible_env.HOME }}/Workshop2/spring-petclinic/target/petclinic.war"
     dest: "{{ ansible_env.CATALINA_HOME }}/webapps/petclinic.war"
-  when: not petclinic_file.stat.exists
-  notify: start tomcat
+  
 
 - name: Change Tomcat Port to 9090
   xml:
